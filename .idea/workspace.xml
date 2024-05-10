@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfd1aa6a-cef0-49f6-807c-60326e48836d" name="Changes" comment="Committing major files.">
-      <change afterPath="$PROJECT_DIR$/models/best.pt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trackers/entity_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/trackers/entity_tracker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yolov8_experiments.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/yolov8_experiments.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +73,7 @@
       <option name="presentableId" value="Default" />
       <updated>1714648747637</updated>
       <workItem from="1714648749910" duration="20640000" />
-      <workItem from="1715359812132" duration="6433000" />
+      <workItem from="1715359812132" duration="7615000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit, moving files to Google Colab for computation purposes.">
       <option name="closed" value="true" />
