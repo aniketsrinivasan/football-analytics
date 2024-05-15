@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dfd1aa6a-cef0-49f6-807c-60326e48836d" name="Changes" comment="Committing major files.">
-      <change beforePath="$PROJECT_DIR$/yolov8_experiments.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/yolov8_experiments.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/best.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/team_clustering/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/team_clustering/team_assigner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trackers/entity_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/trackers/entity_tracker.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +78,9 @@
       <option name="presentableId" value="Default" />
       <updated>1714648747637</updated>
       <workItem from="1714648749910" duration="20640000" />
-      <workItem from="1715359812132" duration="7615000" />
+      <workItem from="1715359812132" duration="8306000" />
+      <workItem from="1715600725085" duration="45000" />
+      <workItem from="1715779082785" duration="5849000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit, moving files to Google Colab for computation purposes.">
       <option name="closed" value="true" />
@@ -115,7 +122,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715364093778</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Committing major files.">
+      <option name="closed" value="true" />
+      <created>1715375260581</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1715375260581</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

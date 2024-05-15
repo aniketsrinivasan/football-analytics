@@ -1,6 +1,7 @@
 from utils import get_bbox_center, get_bbox_width
 from ultralytics import YOLO
 import supervision as sv
+import numpy as np
 import pickle
 import os
 import cv2
@@ -165,6 +166,28 @@ class Tracker:
 
         return frame
 
+    def draw_triangle(self, frame, bbox, colour):
+        # Setting the height and desired half-width of the triangle:
+        DEL_HEIGHT = 15
+        DEL_WIDTH_HALF = 7
+        # We want the triangle to be above the ball.
+        coord_y = int(bbox[1])
+        coord_x, _ = get_bbox_center(bbox)      # x-coord should be centered
+
+        # Defining the triangle:
+        triangle_points = np.array([
+            [coord_x, coord_y],                                 # "bottom point" of triangle
+            [coord_x - DEL_WIDTH_HALF, coord_y - DEL_HEIGHT],   # "top left" of triangle
+            [coord_x + DEL_WIDTH_HALF, coord_y - DEL_HEIGHT]    # "top right" of triangle
+        ])
+
+        # Drawing "inside" of the triangle:
+        cv2.drawContours(frame, [triangle_points], 0, colour, thickness=cv2.FILLED)
+        # Drawing "outline" of the triangle:
+        cv2.drawContours(frame, [triangle_points], 0, colour, thickness=2)
+
+        return frame
+
     # We want to create a custom visualization for the analytics:
     def annotations(self, video_frames, tracks):
         # Initialize an empty list for the output frames:
@@ -187,11 +210,19 @@ class Tracker:
             for player_id, player in player_dict.items():
                 # player_id is the tracked ID
                 # player is a dictionary of the form {"bbox":[xm, ym, xM, yM]}
-                frame = self.draw_ellipse(frame=frame, bbox=player["bbox"], colour=(0, 0, 255), player_id=player_id)
+
+                # Setting the team colour of this player:
+                team_colour = player.get("team_colour", (0, 0, 255))
+                frame = self.draw_ellipse(frame=frame, bbox=player["bbox"],
+                                          colour=team_colour, player_id=player_id)
 
             # Draw the referee annotations:
             for _, referee in referee_dict.items():
                 frame = self.draw_ellipse(frame=frame, bbox=referee["bbox"], colour=(0, 0, 0))
+
+            # Draw the ball annotations:
+            for ball_id, ball in ball_dict.items():
+                frame = self.draw_triangle(frame=frame, bbox=ball["bbox"], colour=(0, 255, 0))
 
             # Appending this modified frame to output_frames:
             output_frames.append(frame)
