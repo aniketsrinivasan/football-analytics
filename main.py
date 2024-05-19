@@ -2,6 +2,7 @@ from utils import read_video, save_video
 from trackers import Tracker
 from team_clustering import TeamAssigner
 from ball_control_assigner import PlayerBallAssigner
+from camera_movement import CameraMovementEstimator
 import numpy as np
 
 ROOT_DIR = "/Users/aniket/PycharmProjects/footballAnalytics"
@@ -19,7 +20,21 @@ def main():
     # Get the tracks (detections) of the current video:
     tracks = tracker.get_entity_tracks(video_frames,
                                        read_from_stub=True,
-                                       stub_path=ROOT_DIR+"stubs/track_stubs.pkl")
+                                       stub_path=ROOT_DIR + "stubs/track_stubs.pkl")
+
+    # Get positions of objects:
+    tracker.add_position_to_tracks(tracks)
+
+    # Camera movement estimation:
+    camera_movement_estimator = CameraMovementEstimator(video_frames[0])
+    camera_movement_per_frame = camera_movement_estimator.get_camera_movement(
+        video_frames,
+        read_from_stub=True,
+        stub_path="stubs/camera_movement.pkl")
+
+    # Adding adjusted tracks of objects, based on camera movement:
+    camera_movement_estimator.add_adjust_positions_to_tracks(tracks, camera_movement_per_frame)
+
     # Interpolate ball positions:
     tracks["ball"] = tracker.interpolate_ball_positions(tracks["ball"])
     print(f"Tracked objects.")
@@ -61,6 +76,10 @@ def main():
 
     # Drawing the annotations to get the output video frames:
     output_video_frames = tracker.annotations(video_frames, tracks, team_ball_control)
+
+    # Draw camera movement:
+    output_video_frames = camera_movement_estimator.draw_camera_movement(output_video_frames,
+                                                                         camera_movement_per_frame)
 
     # Save video
     save_video(output_video_frames, ROOT_DIR + "/football_data/output_videos/output_video.avi")
