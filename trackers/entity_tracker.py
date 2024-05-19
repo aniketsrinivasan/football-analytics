@@ -2,6 +2,7 @@ from utils import get_bbox_center, get_bbox_width
 from ultralytics import YOLO
 import supervision as sv
 import numpy as np
+import pandas as pd
 import pickle
 import os
 import cv2
@@ -14,6 +15,49 @@ class Tracker:
         # Load the model and load the tracker:
         self.model = YOLO(model_path)
         self.tracker = sv.ByteTrack()
+
+    def interpolate_ball_positions(self, ball_positions):
+        # We want to convert the ball positions into a Pandas dataframe first.
+        #   1. create a list using current ball_positions
+        #       x.get(1, {}) gets track_id "1" from the positions (this is our ball)
+        #       (otherwise empty dict)
+        #   2. get the bbox of this track_id
+        #       (otherwise empty list)
+        #   3. convert to DataFrame
+        ball_positions = [x.get(1, {}).get("bbox", []) for x in ball_positions]
+        df_ball_positions = pd.DataFrame(ball_positions, columns=["x1", "y1", "x2", "y2"])
+
+        # Interpolate any empty values:
+        #   edge case:  if first frame is missing a ball bbox
+        df_ball_positions = df_ball_positions.interpolate()
+        #   solution:   we can backfill it
+        df_ball_positions = df_ball_positions.bfill()
+
+        # Converting back to our original format:
+        #   1:            track_id of this ball
+        #   {"bbox": x}:  how the bbox was stored originally where x is the bbox itself (list)
+        ball_positions = [{1: {"bbox": x}} for x in df_ball_positions.to_numpy().tolist()]
+
+    def draw_team_ball_control(self, frame, frame_num, team_ball_control):
+        # Draw semi-transparent rectangle:
+        overlay = frame.copy()
+        cv2.rectangle(overlay, pt1=(1400, 900), pt2=(1920, 1000), color=(255, 255, 255))
+        alpha = 0.5
+        cv2.addWeighted(overlay, alpha, frame, 1-alpha, 0, frame)
+
+        # Calculating the ball control percentage:
+        team_ball_control_till_frame = team_ball_control[:frame_num+1]
+        team_1_num_frames = team_ball_control_till_frame[team_ball_control_till_frame == 1].shape[0]
+        team_2_num_frames = team_ball_control_till_frame[team_ball_control_till_frame == 2].shape[0]
+        team_1_percentage = team_1_num_frames/(team_1_num_frames+team_2_num_frames)
+        team_2_percentage = team_2_num_frames/(team_1_num_frames+team_2_num_frames)
+
+        cv2.putText(frame, f"Team 1 Ball Acquisition: {team_1_percentage*100:.2f}%",
+                    (1420, 920), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
+        cv2.putText(frame, f"Team 2 Ball Acquisition: {team_2_percentage * 100:.2f}%",
+                    (1420, 970), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
+
+        return frame
 
     def detect_frames(self, frames) -> list:
         # Restrict BATCH_SIZE to avoid memory issues:
@@ -189,7 +233,7 @@ class Tracker:
         return frame
 
     # We want to create a custom visualization for the analytics:
-    def annotations(self, video_frames, tracks):
+    def annotations(self, video_frames, tracks, team_ball_control):
         # Initialize an empty list for the output frames:
         output_frames = []
         # Iterating over the video frames we have:
@@ -216,6 +260,10 @@ class Tracker:
                 frame = self.draw_ellipse(frame=frame, bbox=player["bbox"],
                                           colour=team_colour, player_id=player_id)
 
+                # Drawing player ball-acquisition if the player has the ball:
+                if player.get("has_ball", False):
+                    frame = self.draw_triangle(frame=frame, bbox=player["bbox"], colour=(0, 0, 255))
+
             # Draw the referee annotations:
             for _, referee in referee_dict.items():
                 frame = self.draw_ellipse(frame=frame, bbox=referee["bbox"], colour=(0, 0, 0))
@@ -223,6 +271,10 @@ class Tracker:
             # Draw the ball annotations:
             for ball_id, ball in ball_dict.items():
                 frame = self.draw_triangle(frame=frame, bbox=ball["bbox"], colour=(0, 255, 0))
+
+            # Drawing team acquisition information:
+            frame = self.draw_team_ball_control(frame=frame, frame_num=frame_i,
+                                                team_ball_control=team_ball_control)
 
             # Appending this modified frame to output_frames:
             output_frames.append(frame)

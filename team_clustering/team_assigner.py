@@ -2,10 +2,16 @@ from sklearn.cluster import KMeans
 
 
 class TeamAssigner:
+
+    __GOALKEEPER_TEAM1 = 91  # hard-coded goalkeeper player ID
+    __GOALKEEPER_TEAM2 = 92  # hard-coded goalkeeper player ID
+
     def __init__(self):
         self.team_colours = {}
         self.player_team_dict = {}      # {player_id: team_id} format
+        self.kmeans = None
 
+    @staticmethod
     def get_clustering_model(self, image):
         # Reshape the image into an array:
         image_2d = image.reshape(-1, 3)
@@ -44,6 +50,7 @@ class TeamAssigner:
 
         return player_colour
 
+    # Limitations: cannot calculate team of the goalkeeper.
     def assign_team_colour(self, frame, player_detections):
         # For each player, we put the colour into a list:
         player_colours = []
@@ -54,7 +61,7 @@ class TeamAssigner:
             player_colour = self.get_player_colour(frame, bbox)
             player_colours.append(player_colour)
 
-        kmeans = KMeans(n_clusters=2, init='k-means++', n_init=1)
+        kmeans = KMeans(n_clusters=2, init='k-means++', n_init=10)
         kmeans.fit(player_colours)
 
         self.kmeans = kmeans
@@ -73,6 +80,11 @@ class TeamAssigner:
         # Getting the team_id for this player (notice team_id will be 0 or 1, but we want 1 or 2)
         team_id = self.kmeans.predict(player_colour.reshape(1, -1)[0])
         team_id += 1
+
+        if player_id == self.__GOALKEEPER_TEAM1:
+            team_id = 1
+        elif player_id == self.__GOALKEEPER_TEAM2:
+            team_id = 2
 
         self.player_team_dict[player_id] = team_id
 
