@@ -11,7 +11,6 @@ class TeamAssigner:
         self.player_team_dict = {}      # {player_id: team_id} format
         self.kmeans = None
 
-    @staticmethod
     def get_clustering_model(self, image):
         # Reshape the image into an array:
         image_2d = image.reshape(-1, 3)
@@ -28,7 +27,7 @@ class TeamAssigner:
         image_top_half = image[0:int(image.shape[0]/2), :]
 
         # Getting the k-means clustering model:
-        kmeans = self.get_clustering_model(image_top_half)
+        kmeans = self.get_clustering_model(image=image_top_half)
 
         # Get the cluster labels for each "pixel type":
         labels = kmeans.labels_
@@ -78,7 +77,7 @@ class TeamAssigner:
         player_colour = self.get_player_colour(frame, player_bbox)
 
         # Getting the team_id for this player (notice team_id will be 0 or 1, but we want 1 or 2)
-        team_id = self.kmeans.predict(player_colour.reshape(1, -1)[0])
+        team_id = self.kmeans.predict(player_colour.reshape(1, -1))[0]
         team_id += 1
 
         if player_id == self.__GOALKEEPER_TEAM1:

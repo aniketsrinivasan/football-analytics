@@ -23,7 +23,7 @@ class CameraMovementEstimator:
         #   We will extract features from here.
         mask_features = np.zeros_like(first_frame_grayscale)
         mask_features[:, 0:70] = 1
-        mask_features[: 980:1050] = 1
+        mask_features[: 900:1050] = 1
 
         self.features = dict(
             maxCorners=100,        # the max. number of corners we utilize for goodFeaturesToTrack

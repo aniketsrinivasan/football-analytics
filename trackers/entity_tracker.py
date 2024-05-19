@@ -30,7 +30,6 @@ class Tracker:
                     # Writing a new "position" attribute to the tracks dictionary:
                     tracks[object][frame_num][track_id]["position"] = position
 
-
     def interpolate_ball_positions(self, ball_positions):
         # We want to convert the ball positions into a Pandas dataframe first.
         #   1. create a list using current ball_positions
@@ -52,6 +51,8 @@ class Tracker:
         #   1:            track_id of this ball
         #   {"bbox": x}:  how the bbox was stored originally where x is the bbox itself (list)
         ball_positions = [{1: {"bbox": x}} for x in df_ball_positions.to_numpy().tolist()]
+
+        return ball_positions
 
     def draw_team_ball_control(self, frame, frame_num, team_ball_control):
         # Draw semi-transparent rectangle:
@@ -80,8 +81,11 @@ class Tracker:
         BATCH_SIZE = 20
 
         detections = []
+        frames_len = len(frames)
         # Iterating over all the frames, doing self.model.predict in batches:
-        for i in range(0, len(frames), BATCH_SIZE):
+        for i in range(0, frames_len, BATCH_SIZE):
+            if i >= frames_len:
+                continue
             detections_batch = self.model.predict(frames[i:i+BATCH_SIZE], conf=0.1)
             detections += detections_batch      # Accumulating predicted batches
         # Note:
@@ -110,9 +114,6 @@ class Tracker:
             "referees": [],
             "ball": []
         }
-        tracks["players"].append({})
-        tracks["referees"].append({})
-        tracks["ball"].append({})
 
         for frame_i, detection in enumerate(detections):
             # Get the detection classes from this detection:
@@ -129,6 +130,11 @@ class Tracker:
 
             # Tracking objects:
             detections_tracked = self.tracker.update_with_detections(detection_supervision)
+
+            # Add a new (empty dictionary) entry to each of the lists:
+            tracks["players"].append({})
+            tracks["referees"].append({})
+            tracks["ball"].append({})
 
             for frame_detection in detections_tracked:
                 # Extracting bounding box:
