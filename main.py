@@ -4,6 +4,7 @@ from team_clustering import TeamAssigner
 from ball_control_assigner import PlayerBallAssigner
 from camera_movement import CameraMovementEstimator
 from view_transformer import ViewTransformer
+from kinematics import Kinematics
 import numpy as np
 
 ROOT_DIR = "/Users/aniket/PycharmProjects/footballAnalytics"
@@ -43,6 +44,10 @@ def main():
     # Interpolate ball positions:
     tracks["ball"] = tracker.interpolate_ball_positions(tracks["ball"])
     print(f"Tracked objects.")
+
+    # Adding kinematics estimations:
+    kinematics = Kinematics()
+    kinematics.add_kinematics_to_tracks(tracks)
 
     # Assign player teams using k-means clustering:
     team_assigner = TeamAssigner()
@@ -85,6 +90,9 @@ def main():
     # Draw camera movement:
     output_video_frames = camera_movement_estimator.draw_camera_movement(output_video_frames,
                                                                          camera_movement_per_frame)
+
+    # Drawing kinematics information:
+    output_video_frames = kinematics.draw_speed_and_distance(output_video_frames, tracks)
 
     # Save video
     save_video(output_video_frames, ROOT_DIR + "/football_data/output_videos/output_video.avi")
