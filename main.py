@@ -3,6 +3,7 @@ from trackers import Tracker
 from team_clustering import TeamAssigner
 from ball_control_assigner import PlayerBallAssigner
 from camera_movement import CameraMovementEstimator
+from view_transformer import ViewTransformer
 import numpy as np
 
 ROOT_DIR = "/Users/aniket/PycharmProjects/footballAnalytics"
@@ -34,6 +35,10 @@ def main():
 
     # Adding adjusted tracks of objects, based on camera movement:
     camera_movement_estimator.add_adjust_positions_to_tracks(tracks, camera_movement_per_frame)
+
+    # Running the view transformer (for perspective transformation):
+    view_transformer = ViewTransformer()
+    view_transformer.add_transformed_position_to_tracks(tracks)
 
     # Interpolate ball positions:
     tracks["ball"] = tracker.interpolate_ball_positions(tracks["ball"])
