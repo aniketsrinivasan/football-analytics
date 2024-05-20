@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dfd1aa6a-cef0-49f6-807c-60326e48836d" name="Changes" comment="Added kinematics.">
+    <list default="true" id="dfd1aa6a-cef0-49f6-807c-60326e48836d" name="Changes" comment="Ran initial tests.">
       <change afterPath="$PROJECT_DIR$/models/best.pt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/camera_movement/camera_movement_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/camera_movement/camera_movement_estimator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/football_data/output_videos/output_video.avi" beforeDir="false" afterPath="$PROJECT_DIR$/football_data/output_videos/output_video.avi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/team_clustering/team_assigner.py" beforeDir="false" afterPath="$PROJECT_DIR$/team_clustering/team_assigner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trackers/entity_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/trackers/entity_tracker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/video_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/video_utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +80,8 @@
       <workItem from="1715359812132" duration="8306000" />
       <workItem from="1715600725085" duration="45000" />
       <workItem from="1715779082785" duration="6680000" />
-      <workItem from="1716048598749" duration="25462000" />
+      <workItem from="1716048598749" duration="25579000" />
+      <workItem from="1716212062365" duration="2532000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit, moving files to Google Colab for computation purposes.">
       <option name="closed" value="true" />
@@ -174,7 +171,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716134612621</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Ran initial tests.">
+      <option name="closed" value="true" />
+      <created>1716157093527</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1716157093527</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,7 +194,8 @@
     <MESSAGE value="Added camera movement tracking." />
     <MESSAGE value="Added perspective transformations." />
     <MESSAGE value="Added kinematics." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added kinematics." />
+    <MESSAGE value="Ran initial tests." />
+    <option name="LAST_COMMIT_MESSAGE" value="Ran initial tests." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/footballAnalytics$main.coverage" NAME="main Coverage Results" MODIFIED="1714677967163" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

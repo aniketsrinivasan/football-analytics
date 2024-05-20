@@ -57,8 +57,8 @@ class Tracker:
     def draw_team_ball_control(self, frame, frame_num, team_ball_control):
         # Draw semi-transparent rectangle:
         overlay = frame.copy()
-        cv2.rectangle(overlay, pt1=(1400, 900), pt2=(1920, 1000), color=(255, 255, 255))
-        alpha = 0.5
+        cv2.rectangle(overlay, (1380, 880), (1920, 980), (255, 255, 255), -1)
+        alpha = 0.6
         cv2.addWeighted(overlay, alpha, frame, 1-alpha, 0, frame)
 
         # Calculating the ball control percentage:
@@ -69,9 +69,9 @@ class Tracker:
         team_2_percentage = team_2_num_frames/(team_1_num_frames+team_2_num_frames)
 
         cv2.putText(frame, f"Team 1 Ball Acquisition: {team_1_percentage*100:.2f}%",
-                    (1420, 920), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
+                    (1400, 920), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
         cv2.putText(frame, f"Team 2 Ball Acquisition: {team_2_percentage * 100:.2f}%",
-                    (1420, 970), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
+                    (1400, 960), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 3)
 
         return frame
 
