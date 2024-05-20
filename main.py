@@ -67,6 +67,9 @@ def main():
     # kinematics = Kinematics()
     # kinematics.add_kinematics_to_tracks(tracks)
     #
+
+    if DEBUGGING:
+        print(f"Running team clustering algorithm...")
     # Assign player teams using k-means clustering:
     team_assigner = TeamAssigner()
     # Clustering teams based on only the first frame:
@@ -81,7 +84,12 @@ def main():
                                                  player_id)
             tracks["players"][frame_number][player_id]["team"] = team
             tracks["players"][frame_number][player_id]["team_colour"] = team_assigner.team_colours[team]
+    if DEBUGGING:
+        print(f"Teams clustered.")
 
+
+    if DEBUGGING:
+        print(f"Calculating ball acquisition data...")
     # Initializing ball acquisition data collection:
     team_ball_control = []
     # Assigning ball to player:
@@ -105,6 +113,8 @@ def main():
 
     # Convert to np.ndarray to draw ball control percentage annotations:
     team_ball_control = np.array(team_ball_control)
+    if DEBUGGING:
+        print(f"Ball acquisition information calculated.")
 
     # Drawing the annotations to get the output video frames:
     output_video_frames = tracker.annotations(video_frames, tracks, team_ball_control)
